@@ -1,0 +1,60 @@
+<html ng-app="uiRouterSample">
+  <head>
+  <link rel="stylesheet" href="concat/bootstrap.min.css">
+  <link rel="stylesheet" href="concat/styles.css">
+<script src='concat/vendor.js'></script>
+<script src='concat/scripts.js'></script>
+  </head>
+  <body>
+  <div class="dvCustId"><asp:HiddenField ID="CustId" runat="server" /></div>
+<h2>Todo</h2>
+    <div ng-controller="TodoCtrl">
+
+      <div ng-controller='filters'>
+
+      <button ng-click="test($event)" id="MYLAN" class="btn btn-success">Filter 1 Off</button>
+      <button ng-click="test($event)" id="RANBAXY" class="btn btn-success">Filter 2 Off</button>
+
+      </div>
+
+      <!-- <button ng-click="collapse()" class="btn btn-success">Collapse</button> -->
+
+
+  <select ng-model="myPagination" ng-options="color.name for color in pagination"
+  	ng-change="selectChanged(myPagination)" ></select><br>
+
+  <div ng-controller='printCtrl2'>
+    <button id="printAll" ng-click="printAll()">Print All</button>
+    <button id="printSelected" ng-click="printSelected()">Print Selected ( {{selected}} )</button>
+  <div>
+  <strong>Results:</strong> {{myPurchases.length}}
+  <table at-table at-list="myPurchases" at-paginated at-config="tableConfig"
+  class="table table-striped table-condensed table-hover table-bordered" id="queryTable">
+  <thead></thead>
+  <tbody>
+    <tr class="mainRows" ng-click="addPrint(this.item.RowID, $event)" id="{{this.item.RowID}}">
+    <td><input type="checkbox" id="checkbox{{this.item.RowID}}"> Print</td>
+      <td at-implicit at-attribute="NDC" class="fixedWidthTD"></td>
+      <td at-implicit at-attribute="Descr" ></td>
+      <td at-implicit at-attribute="MfgName" ></td>
+      <td at-implicit at-attribute="Form" ></td>
+      <td at-implicit at-attribute="Str" ></td>
+      <td at-implicit at-attribute="Size" ></td>
+      <td at-implicit at-attribute="Qty" ></td>
+      <td at-implicit at-attribute="SalesPrice" >$</td>
+      <td at-implicit at-attribute="Total" >$</td>
+      <td at-implicit at-attribute="TotalSavings" at-initial-sorting="desc" class="bold">$</td>
+      <td at-implicit at-attribute="RecoType" at-title="Provider"></td>
+      <td at-implicit at-attribute="RecoTyped" at-title="Total Savings"></td>
+    </tr>
+  </tbody>
+</table>
+
+<at-pagination at-list="myPurchases" at-config="tableConfig"></at-pagination>
+
+{{tableConfig}}
+
+
+    </div>
+  </body>
+</html>

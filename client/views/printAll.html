@@ -1,0 +1,39 @@
+<!doctype html>
+<html ng-app='uiRouterSample'>
+  <head>
+    <link rel="stylesheet" href="/concat/bootstrap.min.css">
+    <link rel="stylesheet" href="/concat/styles.css">
+    <script src='/concat/vendor.js'></script>
+    <script src='/concat/scripts.js'></script>
+  </head>
+  <body ng-controller="print_page_Ctrl">
+
+    <h2>Recommendations for Print <small>{{printText}}</small></h2>
+
+  <table at-table at-list="myPurchases" at-paginated at-config="tableConfig"
+  class="table table-striped table-condensed table-hover table-bordered print" id="queryTable">
+  <thead></thead>
+  <tbody>
+    <tr class="mainRows" id="{{this.item.RowID}}">
+    <td class="checkboxPrint">Purchased</td>
+      <td at-implicit at-attribute="NDC" class="fixedWidthTD"></td>
+      <td at-implicit at-attribute="Descr" ></td>
+      <td at-implicit at-attribute="MfgName" ></td>
+      <td at-implicit at-attribute="Form" ></td>
+      <td at-implicit at-attribute="Str" ></td>
+      <td at-implicit at-attribute="Size" ></td>
+      <td at-implicit at-attribute="Qty" ></td>
+      <td at-implicit at-attribute="SalesPrice" >$</td>
+      <td at-implicit at-attribute="Total" >$</td>
+      <td at-implicit at-attribute="TotalSavings" at-initial-sorting="desc" class="bold">$</td>
+      <td at-implicit at-attribute="RecoType" at-title="Provider"></td>
+      <td at-implicit at-attribute="RecoTyped" at-title="Total Savings"></td>
+    </tr>
+  </tbody>
+  </table>
+
+  <at-pagination at-list="myPurchases" at-config="tableConfig"></at-pagination>
+
+
+  </body>
+</html>

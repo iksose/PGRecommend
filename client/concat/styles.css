@@ -1,0 +1,47 @@
+.Bubba{
+	/*font-size: small;*/
+}
+
+.bold{
+	font-weight: 800;
+}
+
+.mainRows{
+	cursor: pointer;
+}
+
+tr:first-child th{
+	background-color: black;
+	color: white;
+}
+
+#queryTable th:nth-child(1) {
+		background-color: white !important;
+		text-align: center;
+		/*display: none;*/
+}
+
+#queryTable tr td:nth-child(11) {
+    background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
+#queryTable th:nth-child(11) {
+		background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
+#queryTable tr td:nth-child(13) {
+		/*background: #a5d1ff;*/
+		text-align: center;
+}
+
+.checkboxPrint{
+	/*display: none;*/
+}
+
+.print{
+	width: 90%
+}
