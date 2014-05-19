@@ -2,23 +2,19 @@
 
 angular.module('uiRouterSample')
 .controller('TodoCtrl', function($scope, recoFactory, $window, $rootScope) {
-  console.log("Welcome to the Admin Controller")
-  //$scope.tableConfig.currentPage = 0;
 
   $scope.myPurchases = {}
   $scope.myPurchases_copy = {};
-
-  $scope.filters = $rootScope.filters
 
   recoFactory.getPurchases().then(function(data){
     var newArray = [];
     data.data.aaData.forEach(function(obj, index){
       obj.TotalSavings = parseFloat(parseFloat(obj.TotalSavings).toFixed(2) );
       if(obj.RecoType == "PBA to Endorsed Wholesaler Contract"){
-        obj.RecoType = "PBA Health"
+        obj.RecoType_small = "PBA Health"
       }
       else if(obj.RecoType == "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "Endorsed Wholesaler Contract to PBA"){
-        obj.RecoType = "Primary Wholesaler"
+        obj.RecoType_small = "Primary Wholesaler"
       }
       newArray.push(obj)
     })
@@ -33,13 +29,15 @@ angular.module('uiRouterSample')
 
   $scope.myRecommendations = {}
   recoFactory.getRecommendations().then(function(data){
-    console.log("Recos", data.data.aaData)
     var newArray = [];
     data.data.aaData.forEach(function(obj, index){
       if(obj.RecoType == "Endorsed Wholesaler Contract to PBA"){
         obj.RecoType = "PBA Health"
       }
-      else if(obj.RecoType == "1Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "1Endorsed Wholesaler Contract to PBA"){
+      else if(obj.RecoType == "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "Endorsed Wholesaler Contract to PBA"){
+        obj.RecoType = "Primary Wholesaler"
+      }
+      else if(obj.RecoType == "PBA to Endorsed Wholesaler Contract"){
         obj.RecoType = "Primary Wholesaler"
       }
       newArray.push(obj)
@@ -92,7 +90,6 @@ angular.module('uiRouterSample')
       new_row.insertCell(0).innerHTML = "Recommendation";
       new_row.cells[0].className = "Bubba";
       var match = _.findWhere($scope.myRecommendations, {RowID: myRows[i].id});
-      console.log("MATCH?", match)
       new_row.insertCell(1).innerHTML = match.NDC;
       new_row.insertCell(2).innerHTML = match.Descr;
       new_row.insertCell(3).innerHTML = match.MfgName;
@@ -130,6 +127,9 @@ angular.module('uiRouterSample')
     }
   }
 
+
+  $scope.switchStatus = false;
+  $scope.switchStatus2 = true;
 
 
   // var bool = true;

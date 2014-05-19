@@ -5,9 +5,7 @@ var app = angular.module('uiRouterSample', [
 .run(
   [          '$rootScope',
     function ($rootScope) {
-    $rootScope.psCustID  = 1
-    // $rootScope.psCustID  = document.getElementsByClassName("dvCustId")
-    $rootScope.filters = {};
+    // $rootScope.psCustID  = document.getElementsByClassName("dvCustId")[0].innerText;
     }
   ]
 )

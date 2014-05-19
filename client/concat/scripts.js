@@ -1,68 +1,7 @@
 "use strict";
-var app = angular.module('uiRouterSample', ['angular-table']).run(['$rootScope', function($rootScope) {
-  $rootScope.psCustID = 1;
-  $rootScope.filters = {};
-}]);
-console.log("hmm");
-var evens = [2, 4, 6, 8];
-var odds = evens.map((function(v) {
-  return v + 1;
-}));
-var nums = evens.map((function(v, i) {
-  return v + i;
-}));
-console.log("Nums", nums);
-var melter = function(obj) {
-  var temp = obj;
-  temp.melted = "melted";
-  return temp;
-};
-var empty = (function() {});
-var Car = function Car(make) {
-  this.make = make;
-  this.currentSpeed = 25;
-};
-($traceurRuntime.createClass)(Car, {printCurrentSpeed: function() {
-    console.log(this.make + ' is going ' + this.currentSpeed + ' mph.');
-  }}, {});
-var RaceCar = function RaceCar(make, topSpeed) {
-  $traceurRuntime.superCall(this, $RaceCar.prototype, "constructor", [make]);
-  this.topSpeed = topSpeed;
-};
-var $RaceCar = RaceCar;
-($traceurRuntime.createClass)(RaceCar, {goFast: function() {
-    this.currentSpeed = this.topSpeed;
-  }}, {}, Car);
-var stang = new RaceCar('Mustang', 150);
-var prius = new Car('Prius', 100);
-stang.printCurrentSpeed();
-stang.goFast();
-stang.printCurrentSpeed();
-prius.printCurrentSpeed();
-var num = 0;
-{
-  try {
-    throw undefined;
-  } catch ($i) {
-    $i = 0;
-    for (; $i < 10; $i++) {
-      try {
-        throw undefined;
-      } catch (i) {
-        i = $i;
-        try {
-          num += i;
-          console.log('value of i in block: ' + i);
-        } finally {
-          $i = i;
-        }
-      }
-    }
-  }
-}
-console.log('Is i defined here?: ' + (typeof i !== 'undefined'));
+var app = angular.module('uiRouterSample', ['angular-table']).run(['$rootScope', function($rootScope) {}]);
 angular.module('uiRouterSample').factory('recoFactory', function($http, $rootScope) {
-  var psCustID = $rootScope.psCustID;
+  var psCustID = document.getElementsByClassName("dvCustId")[0].innerText;
   return {
     getPurchases: function(url) {
       return $http.get('/_vti_bin/ProfitguardRecommendationsWCF.svc/GetPurchases/' + psCustID);
@@ -74,26 +13,71 @@ angular.module('uiRouterSample').factory('recoFactory', function($http, $rootSco
 });
 angular.module('uiRouterSample').controller('filters', function($scope, $filter, $window, $rootScope) {
   $scope.filters = {};
-  $scope.test = function(event) {
-    var filter = event.target.id;
-    var something = document.getElementById(filter);
-    if ($scope.filters[$traceurRuntime.toProperty(filter)]) {
-      delete $scope.filters[$traceurRuntime.toProperty(filter)];
-      something.innerText = "Off";
+  $traceurRuntime.setProperty($scope.filters, "Primary Wholesaler", {
+    enabled: false,
+    text: ["Endorsed Wholesaler Contract to PBA", "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract", "Endorsed Wholesaler Contract to Endorsed Wholesaler Contract", "Endorsed Wholesaler Non-Contract to PBA"]
+  });
+  $traceurRuntime.setProperty($scope.filters, "From PBA", {
+    enabled: false,
+    text: ["PBA to Endorsed Wholesaler Contract"]
+  });
+  $traceurRuntime.setProperty($scope.filters, "Source", {
+    enabled: false,
+    text: ["Endorsed Wholesaler Contract to PBA", "Endorsed Wholesaler Contract to Endorsed Wholesaler Contract", "PBA to Endorsed Wholesaler Contract"]
+  });
+  $traceurRuntime.setProperty($scope.filters, "Non Contract", {
+    enabled: false,
+    text: ["Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract", "Endorsed Wholesaler Non-Contract to PBA"]
+  });
+  $scope.filterClick = function(string, event) {
+    var filter = string;
+    var element = document.getElementById(event.target.id);
+    if ($scope.filters[$traceurRuntime.toProperty(filter)].enabled == true) {
+      $scope.filters[$traceurRuntime.toProperty(filter)].enabled = false;
+      element.className = event.target.id;
     } else {
-      $traceurRuntime.setProperty($scope.filters, filter, true);
-      something.innerText = "On";
+      $scope.filters[$traceurRuntime.toProperty(filter)].enabled = true;
+      element.className += " " + event.target.id + "Red";
     }
     $scope.ammend();
   };
   $scope.ammend = function() {
     var allMatches = [];
+    var jesus = [];
+    var do_any_of_my_objects_have_a_true_filter = false;
     for (var key in $scope.filters) {
-      var match = _.where($scope.$parent.myPurchases_copy, {MfgName: key});
-      allMatches = allMatches.concat(match);
+      if ($scope.filters[$traceurRuntime.toProperty(key)].enabled) {
+        do_any_of_my_objects_have_a_true_filter = true;
+        console.log("Filter for", key, "is true, do this");
+        var firstRun = true;
+        var rejectedArray = jesus.length > 0 ? jesus : [];
+        var firstRunMaster = jesus.length > 0 ? jesus : $scope.$parent.myPurchases_copy;
+        console.log("Value of jesus on second pass", rejectedArray.length);
+        for (var i = 0; i < $scope.filters[$traceurRuntime.toProperty(key)].text.length; i++) {
+          if (!firstRun) {
+            console.log("On second run...", i);
+            var without = _.reject(rejectedArray, function(obj) {
+              return obj.RecoType == $scope.filters[$traceurRuntime.toProperty(key)].text[$traceurRuntime.toProperty(i)];
+            });
+            rejectedArray = without;
+          }
+          if (firstRun) {
+            console.log("On first run...", i);
+            console.log(firstRunMaster.length);
+            var without = _.reject(firstRunMaster, function(obj) {
+              return obj.RecoType == $scope.filters[$traceurRuntime.toProperty(key)].text[$traceurRuntime.toProperty(i)];
+            });
+            rejectedArray = without;
+            var firstRun = false;
+          }
+        }
+        var jesus = rejectedArray;
+        console.log("Done with first filter for", key, jesus);
+        $scope.$parent.myPurchases = rejectedArray;
+      }
     }
-    $scope.$parent.myPurchases = allMatches;
-    if (Object.keys($scope.filters).length == 0) {
+    if (!do_any_of_my_objects_have_a_true_filter) {
+      console.log("No filters...");
       $scope.$parent.myPurchases = $scope.$parent.myPurchases_copy;
     }
     $scope.$parent.destroy();
@@ -103,18 +87,16 @@ angular.module('uiRouterSample').controller('filters', function($scope, $filter,
   };
 });
 angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFactory, $window, $rootScope) {
-  console.log("Welcome to the Admin Controller");
   $scope.myPurchases = {};
   $scope.myPurchases_copy = {};
-  $scope.filters = $rootScope.filters;
   recoFactory.getPurchases().then(function(data) {
     var newArray = [];
     data.data.aaData.forEach(function(obj, index) {
       obj.TotalSavings = parseFloat(parseFloat(obj.TotalSavings).toFixed(2));
       if (obj.RecoType == "PBA to Endorsed Wholesaler Contract") {
-        obj.RecoType = "PBA Health";
+        obj.RecoType_small = "PBA Health";
       } else if (obj.RecoType == "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "Endorsed Wholesaler Contract to PBA") {
-        obj.RecoType = "Primary Wholesaler";
+        obj.RecoType_small = "Primary Wholesaler";
       }
       newArray.push(obj);
     });
@@ -124,12 +106,13 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
   });
   $scope.myRecommendations = {};
   recoFactory.getRecommendations().then(function(data) {
-    console.log("Recos", data.data.aaData);
     var newArray = [];
     data.data.aaData.forEach(function(obj, index) {
       if (obj.RecoType == "Endorsed Wholesaler Contract to PBA") {
         obj.RecoType = "PBA Health";
-      } else if (obj.RecoType == "1Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "1Endorsed Wholesaler Contract to PBA") {
+      } else if (obj.RecoType == "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "Endorsed Wholesaler Contract to PBA") {
+        obj.RecoType = "Primary Wholesaler";
+      } else if (obj.RecoType == "PBA to Endorsed Wholesaler Contract") {
         obj.RecoType = "Primary Wholesaler";
       }
       newArray.push(obj);
@@ -185,7 +168,6 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
       new_row.insertCell(0).innerHTML = "Recommendation";
       new_row.cells[0].className = "Bubba";
       var match = _.findWhere($scope.myRecommendations, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
-      console.log("MATCH?", match);
       new_row.insertCell(1).innerHTML = match.NDC;
       new_row.insertCell(2).innerHTML = match.Descr;
       new_row.insertCell(3).innerHTML = match.MfgName;
@@ -215,34 +197,34 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
       myTable.rows[$traceurRuntime.toProperty(i + 1)].remove();
     }
   };
+  $scope.switchStatus = false;
+  $scope.switchStatus2 = true;
   $scope.selected = 0;
 });
 angular.module('uiRouterSample').controller('printCtrl2', function($scope, $filter, $window, $rootScope) {
-  console.log("Welcome to print 2");
-  $scope.addPrint = function(arg, $event) {
+  $scope.addPrint = function(rowTargID, $event) {
     if ($event.target.type == "checkbox") {
-      var match = _.findWhere($scope.myPurchases, {RowID: arg});
-      match.checked = document.getElementById('checkbox' + arg).checked;
+      var match = _.findWhere($scope.myPurchases, {RowID: rowTargID});
+      match.checked = document.getElementById('checkbox' + rowTargID).checked;
       if (match.checked)
         $scope.selected++;
       else
         $scope.selected--;
       return;
     }
-    if (document.getElementById('checkbox' + arg).checked) {
-      document.getElementById('checkbox' + arg).checked = false;
-      var match = _.findWhere($scope.myPurchases, {RowID: arg});
+    if (document.getElementById('checkbox' + rowTargID).checked) {
+      document.getElementById('checkbox' + rowTargID).checked = false;
+      var match = _.findWhere($scope.myPurchases, {RowID: rowTargID});
       match.checked = false;
       $scope.selected--;
     } else {
-      document.getElementById('checkbox' + arg).checked = true;
-      var match = _.findWhere($scope.myPurchases, {RowID: arg});
+      document.getElementById('checkbox' + rowTargID).checked = true;
+      var match = _.findWhere($scope.myPurchases, {RowID: rowTargID});
       match.checked = true;
       $scope.selected++;
     }
   };
   $scope.printAll = function() {
-    console.log("Print all?");
     var childWindow = $window;
     childWindow.sessionStorage.purchases = angular.toJson($scope.myPurchases);
     childWindow.sessionStorage.recommendations = angular.toJson($scope.myRecommendations);
@@ -251,43 +233,20 @@ angular.module('uiRouterSample').controller('printCtrl2', function($scope, $filt
   };
   $scope.selected = 0;
   $scope.printSelected = function() {
-    console.log("Print selected?");
     var childWindow = $window;
     var selectedPurchases = _.where($scope.myPurchases, {checked: true});
     childWindow.sessionStorage.purchases = angular.toJson(selectedPurchases);
     childWindow.sessionStorage.recommendations = angular.toJson($scope.myRecommendations);
-    childWindow.sessionStorage.printText = "Showing " + selectedPurchases.length + " of " + $scope.colors[3].shade;
+    childWindow.sessionStorage.printText = "Showing " + selectedPurchases.length + " of " + $scope.pagination[3].shade;
     childWindow.open('/views/printAll.html');
   };
 });
-angular.module('uiRouterSample').controller('print_page_Ctrl', function($scope, recoFactory, $window) {
+angular.module('uiRouterSample').controller('print_page_Ctrl', function($scope, $window) {
   console.log("Welcome to the print Controller");
-  $scope.myPurchases = {};
   $scope.printText = sessionStorage.printText;
-  var newArray = [];
-  var purchases = JSON.parse(sessionStorage.purchases);
-  purchases.forEach(function(obj, index) {
-    obj.TotalSavings = parseFloat(parseFloat(obj.TotalSavings).toFixed(2));
-    if (obj.RecoType == "PBA to Endorsed Wholesaler Contract") {
-      obj.RecoType = "PBA Health";
-    } else if (obj.RecoType == "Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "Endorsed Wholesaler Contract to PBA") {
-      obj.RecoType = "Primary Wholesaler";
-    }
-    newArray.push(obj);
-  });
-  $scope.myPurchases = newArray;
-  $scope.myRecommendations = {};
-  var newArray = [];
-  var recommendations = JSON.parse(sessionStorage.recommendations);
-  recommendations.forEach(function(obj, index) {
-    if (obj.RecoType == "Endorsed Wholesaler Contract to PBA") {
-      obj.RecoType = "PBA Health";
-    } else if (obj.RecoType == "1Endorsed Wholesaler Non-Contract to Endorsed Wholesaler Contract" || "1Endorsed Wholesaler Contract to PBA") {
-      obj.RecoType = "Primary Wholesaler";
-    }
-    newArray.push(obj);
-  });
-  $scope.myRecommendations = newArray;
+  $scope.myPurchases = JSON.parse(sessionStorage.purchases);
+  $scope.myRecommendations = JSON.parse(sessionStorage.recommendations);
+  ;
   setTimeout(function() {
     ammendment();
   }, 100);
@@ -314,7 +273,7 @@ angular.module('uiRouterSample').controller('print_page_Ctrl', function($scope, 
     oldAmount: $scope.myColor.name
   };
   function ammendment() {
-    var available = purchases.length;
+    var available = $scope.myPurchases.length;
     var myTable = document.getElementById("queryTable");
     var myRows = document.getElementsByClassName("mainRows");
     for (var i = 0; i < available; i++) {
@@ -322,7 +281,7 @@ angular.module('uiRouterSample').controller('print_page_Ctrl', function($scope, 
       new_row.id = "row" + i;
       new_row.insertCell(0).innerHTML = "Recommend";
       new_row.cells[0].className = "Bubba";
-      var match = _.findWhere(recommendations, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
+      var match = _.findWhere($scope.myRecommendations, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
       new_row.insertCell(1).innerHTML = match.NDC;
       new_row.insertCell(2).innerHTML = match.Descr;
       new_row.insertCell(3).innerHTML = match.MfgName;
