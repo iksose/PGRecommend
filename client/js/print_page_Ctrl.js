@@ -26,34 +26,35 @@ angular.module('uiRouterSample')
 
 
   function ammendment(){
-    // var available = $scope.tableConfig.itemsPerPage
-    var available = $scope.myPurchases.length;
+    var available = $scope.tableConfig.itemsPerPage
     var myTable = document.getElementById("queryTable");
     var myRows = document.getElementsByClassName("mainRows");
     for (var i = 0; i < available; i++) {
       var new_row = myTable.insertRow( myRows[i].rowIndex + 1);
       new_row.id = "row"+i;
-      new_row.insertCell(0).innerHTML = "Recommend";
-      new_row.cells[0].className = "Bubba";
+      new_row.insertCell(0).innerHTML = '<input type="radio" class="hideSuggest" data-rowid='+ myRows[i].id +'> <small>Hide</small>'
+      new_row.insertCell(1).innerHTML = "Recommendation";
+      new_row.cells[1].className = "Bubba";
       var match = _.findWhere($scope.myRecommendations, {RowID: myRows[i].id});
-      new_row.insertCell(1).innerHTML = match.NDC;
-      new_row.insertCell(2).innerHTML = match.Descr;
-      new_row.insertCell(3).innerHTML = match.MfgName;
-      new_row.insertCell(4).innerHTML = match.Form;
-      new_row.insertCell(5).innerHTML = match.Str;
-      new_row.insertCell(6).innerHTML = match.Size;
-      new_row.insertCell(7).innerHTML = "";
-      new_row.insertCell(8).innerHTML = "$"+ parseFloat(match.RecSalesPrice).toFixed(2);
-      new_row.insertCell(9).innerHTML = "$"+ parseFloat(match.RecTotal).toFixed(2);
+      new_row.insertCell(2).innerHTML = match.NDC;
+      new_row.insertCell(3).innerHTML = match.Descr;
+      new_row.insertCell(4).innerHTML = match.MfgName;
+      new_row.insertCell(5).innerHTML = match.Form;
+      new_row.insertCell(6).innerHTML = match.Str;
+      new_row.insertCell(7).innerHTML = match.Size;
+      new_row.insertCell(8).innerHTML = "";
+      new_row.insertCell(9).innerHTML = "$"+ parseFloat(match.RecSalesPrice).toFixed(2);
+      new_row.insertCell(10).innerHTML = "$"+ parseFloat(match.RecTotal).toFixed(2);
       var myPurch = _.findWhere($scope.myPurchases, {RowID: myRows[i].id});
       // row 10 is hidden...see CSS rules.
-      new_row.insertCell(10).innerHTML = myPurch.TotalSavings;
-      new_row.cells[10].className = "bold";
-      // back to regularly scheduled program;
-      new_row.insertCell(11).innerHTML = match.RecoType;
+      new_row.insertCell(11).innerHTML = myPurch.TotalSavings;
       new_row.cells[11].className = "bold";
-      new_row.insertCell(12).innerHTML = "$" + myPurch.TotalSavings;
+      // back to regularly scheduled program;
+      new_row.insertCell(12).innerHTML = match.RecoType;
       new_row.cells[12].className = "bold";
+      new_row.insertCell(13).innerHTML = "$" + myPurch.TotalSavings;
+      new_row.cells[13].className = "bold";
+
     };
   }
 

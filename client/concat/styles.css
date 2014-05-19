@@ -15,19 +15,36 @@ tr:first-child th{
 	color: white;
 }
 
+.print tr td:nth-child(1) {
+		background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
+.print th:nth-child(1) {
+		background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
+#queryTable{
+	font-size: 14px;
+}
+
+
 #queryTable th:nth-child(1) {
 		background-color: white !important;
 		text-align: center;
 		/*display: none;*/
 }
 
-#queryTable tr td:nth-child(11) {
+#queryTable tr td:nth-child(12) {
     background: #a5d1ff;
 		text-align: center;
 		display: none;
 }
 
-#queryTable th:nth-child(11) {
+#queryTable th:nth-child(12) {
 		background: #a5d1ff;
 		text-align: center;
 		display: none;
