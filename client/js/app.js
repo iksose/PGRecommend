@@ -1,5 +1,6 @@
 var app = angular.module('uiRouterSample', [
-'angular-table'
+'angular-table',
+'toggle-switch'
 ])
 
 .run(

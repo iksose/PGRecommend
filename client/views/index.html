@@ -18,15 +18,53 @@
         <div class="endorsed" id="endorsed" ng-click="filterClick('Primary Wholesaler', $event)"></div>
       </div>
     </div>
+
+  <!-- <div class="toggles">
+
+    <toggle-switch
+      model="switchStatus"
+      off-label="Hidden"
+      on-label="Show"
+      knob-label="Non Rebated ">
+    <toggle-switch>
+
+
+  </div>
+
+  <div class="toggles">
+
+    <toggle-switch
+      model="switchStatus2"
+      off-label="Hidden"
+      on-label="Show"
+      knob-label="Rebated ">
+    <toggle-switch>
+
+
+  </div>
+
+  <div class="toggles">
+
+    <toggle-switch
+      model="switchStatus3"
+      off-label="Hidden"
+      on-label="Show"
+      knob-label="PBA Health ">
+    <toggle-switch>
+
+
+  </div> -->
     <!-- <br> -->
 
 
-<div ng-controller='printCtrl2' >
+<!-- <div ng-controller='printCtrl2' > -->
   <span id="printButtons">
   <button id="printAll" ng-click="printAll()"
     class="btn btn-info btn-sm">Print All</button>
   <button id="printSelected" ng-click="printSelected()"
     class="btn btn-info btn-sm">Print Selected ( {{selected}} )</button>
+    <button id="printSelected" ng-click="magic()"
+      class="btn btn-info btn-sm">{{showStatus}}</button>
   </span>
 
 
@@ -37,12 +75,12 @@
   </p>
 
   <table at-table at-list="myPurchases" at-paginated at-config="tableConfig"
-  class="table table-striped table-condensed table-hover table-bordered" id="queryTable">
+  class="table table-striped table-condensed  table-bordered" id="queryTable">
     <thead></thead>
     <tbody>
-      <tr class="mainRows" ng-click="addPrint(this.item.RowID, $event)" id="{{this.item.RowID}}">
-      <td><input type="checkbox" id="checkbox{{this.item.RowID}}"> Print</td>
-        <td at-implicit at-attribute="NDC2" at-title="Type" >Purchased</td>
+      <tr class="mainRows"  id="{{this.item.RowID}}">
+      <!-- <td><input type="checkbox" id="checkbox{{this.item.RowID}}"> Print?</td> -->
+        <!-- <td at-implicit at-attribute="NDC2" at-title="Type" >Purchased</td> -->
         <td at-implicit at-attribute="NDC" class="fixedWidthTD"></td>
         <td at-implicit at-attribute="Descr" at-title="Description"></td>
         <td at-implicit at-attribute="MfgName" at-title="Manufacturer"></td>
@@ -53,16 +91,83 @@
         <td at-implicit at-attribute="SalesPrice" >$</td>
         <td at-implicit at-attribute="Total" >$</td>
         <td at-implicit at-attribute="TotalSavings" at-initial-sorting="desc" class="bold">$</td>
+        <!-- <td at-implicit at-attribute="TotalSavings" at-title="Total Savings" class="blue">$</td> -->
         <td at-implicit at-attribute="RecoType_small" at-title="Supplier"></td>
-        <td at-implicit at-attribute="RecoTyped" at-title="Total Savings"></td>
       </tr>
     </tbody>
   </table>
   <strong>Results:</strong> {{myPurchases.length}}
   <at-pagination at-list="myPurchases" at-config="tableConfig"></at-pagination>
 
+    <div ng-show='selected'>
+      Print Queue
+
+
+    <!-- <ul class="example-animate-container">
+    <li class="animate-repeat" ng-repeat="friend in myPurchases | filter: { checked: 'true' }">
+    [{{$index + 1}}] {{friend.Descr}} - {{friend.NDC}} - ${{friend.TotalSavings}}
+    </li>
+    </ul> -->
+
+    <div class="animate-repeat" ng-repeat="friend in myPurchases | filter: { checked: 'true' } | orderBy: 'TotalSavings':true ">
+      <table class="table table-bordered table-condensed table-striped nonprintTable">
+        <tbody>
+          <tr >
+            <td><button class="btn btn-danger btn-xs" ng-click=removePrint($event) id="{{friend.RowID}}">Remove</button></td>
+            <td colspan='8'><span class="printTitle">
+            <center>{{friend.Descr}} -- {{friend.Str}} -- {{friend.Form}}</center>
+            </span></td></tr>
+          <tr>
+            <td></td>
+            <td>NDC</td>
+            <td>MFG</td>
+            <td>Size</td>
+            <td>Qty</td>
+            <td>Unit Price</td>
+            <td>Sale Price</td>
+            <td>Supplier</td>
+            <td>Total Savings</td>
+          </tr>
+          <tr>
+            <td>Current</td>
+            <td>{{friend.NDC}}</td>
+            <td>{{friend.MfgName}}</td>
+            <td>{{friend.Size}}</td>
+            <td>{{friend.Qty}}</td>
+            <td>${{friend.UnitPrice}}</td>
+            <td>${{friend.SalesPrice}}</td>
+            <td>{{friend.RecoType_small}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Recommended</td>
+            <td>{{friend.Reco.NDC}}</td>
+            <td>{{friend.Reco.MfgName}}</td>
+            <td>{{friend.Reco.Size}}</td>
+            <td>{{friend.Reco.Qty}}</td>
+            <td>${{friend.Reco.UnitPrice}}</td>
+            <td>${{friend.Reco.RecSalesPrice}}</td>
+            <td>{{friend.Reco.RecoType}}</td>
+            <td>${{friend.TotalSavings_string }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <br> -->
     </div>
 
-    <h4>Hidden recommendations will be removed on your next visit, for 1 month<h4>
+
+
+
+
+    <button id="printSelected" ng-click="printSelected()"
+      class="btn btn-info btn-sm">Print Selected ( {{selected}} )</button>
+
+    </div>
+    <!-- end ng-show -->
+
+    </div>
+
+
+
   </body>
 </html>

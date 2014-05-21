@@ -10,14 +10,58 @@
 
     <h2>Recommendations for Print <small>{{printText}}</small></h2>
 
-  <table at-table at-list="myPurchases" at-paginated at-config="tableConfig"
-  class="table table-striped table-condensed table-hover table-bordered print" id="queryTable">
-  <thead></thead>
-  <tbody>
+<!-- <ul class="example-animate-container"> -->
+<div class="animate-repeat" ng-repeat="friend in myPurchases | orderBy: 'TotalSavings':true ">
+  <table class="table table-bordered table-condensed printTable">
+    <tbody>
+      <tr ><td colspan='9'><span class="printTitle">
+        <center>{{friend.Descr}} -- {{friend.Str}} -- {{friend.Form}}</center>
+        </span></td></tr>
+      <tr>
+        <td></td>
+        <td>NDC</td>
+        <td>MFG</td>
+        <td>Size</td>
+        <td>Qty</td>
+        <td>Unit Price</td>
+        <td>Sale Price</td>
+        <td>Supplier</td>
+        <td>Total Savings</td>
+      </tr>
+      <tr>
+        <td>Current</td>
+        <td>{{friend.NDC}}</td>
+        <td>{{friend.MfgName}}</td>
+        <td>{{friend.Size}}</td>
+        <td>{{friend.Qty}}</td>
+        <td>${{friend.UnitPrice}}</td>
+        <td>${{friend.SalesPrice}}</td>
+        <td>{{friend.RecoType_small}}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Recommended</td>
+        <td>{{friend.Reco.NDC}}</td>
+        <td>{{friend.Reco.MfgName}}</td>
+        <td>{{friend.Reco.Size}}</td>
+        <td>{{friend.Reco.Qty}}</td>
+        <td>${{friend.Reco.UnitPrice}}</td>
+        <td>${{friend.Reco.RecSalesPrice}}</td>
+        <td>{{friend.Reco.RecoType}}</td>
+        <td>${{friend.TotalSavings_string }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <br> -->
+</div>
+<!-- </ul> -->
+
+
+  <!-- <tbody>
     <tr class="mainRows" id="{{this.item.RowID}}">
     <td><input type="checkbox" > Print</td>
       <td at-implicit at-attribute="NDC2" at-title="Type" >Purchased</td>
-      <td at-implicit at-attribute="NDC" class="fixedWidthTD"></td>
+      <td at-implicit at-attribute="NDC" class="fixedWidthTD">{{this.item.NDC}}</td>
       <td at-implicit at-attribute="Descr" at-title="Description"></td>
       <td at-implicit at-attribute="MfgName" at-title="Manufacturer"></td>
       <td at-implicit at-attribute="Form" ></td>
@@ -26,11 +70,12 @@
       <td at-implicit at-attribute="Qty" ></td>
       <td at-implicit at-attribute="SalesPrice" >$</td>
       <td at-implicit at-attribute="Total" >$</td>
-      <td at-implicit at-attribute="TotalSavings" at-initial-sorting="desc" class="bold">$</td>
+      <td at-implicit at-attribute="TotalSavings2" at-initial-sorting="desc" class="bold" at-title="Savings"></td>
       <td at-implicit at-attribute="RecoType_small" at-title="Supplier"></td>
       <td at-implicit at-attribute="RecoTyped" at-title="Total Savings"></td>
     </tr>
-  </tbody>
+  </tbody> -->
+
   </table>
 
   </body>

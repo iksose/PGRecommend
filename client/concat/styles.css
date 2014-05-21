@@ -2,13 +2,32 @@
 	/*font-size: small;*/
 }
 
+/*for the alternate subrow...for whatever reason*/
+tr:nth-child(1n) p {
+	float:left !important;
+}
+
+.printTitle{
+	text-align: center;
+	font-weight: 800;
+}
+
+.printTable{
+	font-size: 10px;
+	padding-bottom: 10px;
+}
+
+.nonprintTable{
+	font-size: 12px;
+}
+
 .bold{
 	font-weight: 800;
 }
 
-.mainRows{
+/*.mainRows{
 	cursor: pointer;
-}
+}*/
 
 tr:first-child th{
 	background-color: black;
@@ -32,19 +51,61 @@ tr:first-child th{
 }
 
 
-#queryTable th:nth-child(1) {
-		background-color: white !important;
+#queryTable tr td:nth-child(4) {
+		/*background: #a5d1ff;*/
 		text-align: center;
-		/*display: none;*/
+}
+/*tr:nth-child(even) {background: #CCC}*/
+
+#queryTable tr.odd{
+	background: red;
 }
 
-#queryTable tr td:nth-child(12) {
+tr:nth-child(2n) td{
+    /*position: relative;*/
+    /*left: 20px;*/
+		/*margin-left: 50px;*/
+		/*border: 0px !important;*/*/
+		empty-cells: hide !important;
+		border-collapse: separate;
+}
+
+tr:nth-child(2n) p{
+	float: left;
+	/*padding-right: 2%;*/
+	width: 15%;
+}
+
+.recSupply{
+	min-width: 25% !important;
+	/*padding-left: 1%;*/
+	/*max-width: 40% !important;*/
+	/*width: 35% !important;*/
+}
+
+.teal{
+	background-color: #5bc0de !important;
+	color: white;
+	padding: 10px;
+}
+
+.smaller{
+	width: 10% !important;
+}
+
+/*#queryTable th:nth-child(10) {
+		background: #a5d1ff;
+		text-align: center;
+}*/
+
+
+/*#queryTable tr td:nth-child(10) {
     background: #a5d1ff;
 		text-align: center;
 		display: none;
 }
 
-#queryTable th:nth-child(12) {
+#queryTable th:nth-child(10) {
 		background: #a5d1ff;
 		text-align: center;
 		display: none;
@@ -54,6 +115,11 @@ tr:first-child th{
 		/*background: #a5d1ff;*/
 		text-align: center;
 }
+
+#queryTable tr td:nth-child(14) {
+		background: #a5d1ff;
+		text-align: center;
+}*/
 
 .checkboxPrint{
 	/*display: none;*/
@@ -185,4 +251,88 @@ cursor: pointer;
 
 #cachedImages{
  display: none;
+}
+
+
+.toggles{
+	height: 30px;
+	float: left;
+	/*width: 100px;*/
+}
+
+
+
+/*TOGGLE SWITCH ANGULAR*/
+.switch {
+    border: 1px solid;
+    cursor: pointer;
+    display: inline-block;
+    text-align: left;
+    overflow: hidden;
+    line-height: 8px;
+    min-width: 100px;
+}
+
+.switch.disabled > div > span.knob {
+    background: #AAA;
+}
+
+.switch span {
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    height: 100%;
+    line-height: 20px;
+    padding: 4px;
+    text-align: center;
+    width: 33%;
+    white-space: nowrap;
+
+    box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.switch > div {
+    position: relative;
+    width: 150%;
+}
+
+.switch .knob {
+    background: red;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    background-color: #f5f5f5;
+    width: 34%;
+    z-index: 100;
+}
+
+.switch .switch-on {
+    left: 0%;
+}
+
+.switch .switch-off {
+    left: -50%
+}
+
+.switch .swtich-left, .switch .switch-right {
+    z-index: 1;
+}
+
+.switch .switch-left {
+    color: #fff;
+    background: #5bc0de;
+}
+
+.switch .switch-right {
+    color: #333;
+    background: #f67159;
+}
+
+.switch-animate {
+    transition: left 0.5s;
+    -o-transition: left 0.5s;
+    -moz-transition: left 0.5s;
+    -webkit-transition: left 0.5s;
 }

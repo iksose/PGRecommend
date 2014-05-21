@@ -3,6 +3,7 @@ angular.module('uiRouterSample')
   $scope.addPrint = function(rowTargID, $event){
     // $event.preventDefault();
     if($event.target.type == "checkbox"){
+      console.log("CHECKED")
       var match = _.findWhere($scope.myPurchases, {RowID: rowTargID});
       match.checked = document.getElementById('checkbox' + rowTargID).checked;
       if(match.checked)
@@ -33,7 +34,7 @@ angular.module('uiRouterSample')
     childWindow.open('/views/printAll.html')
   }
 
-  $scope.selected = 0
+  // $scope.selected = 0
   $scope.printSelected = function(){
     var childWindow = $window;
     var selectedPurchases = _.where($scope.myPurchases, {checked:true})
