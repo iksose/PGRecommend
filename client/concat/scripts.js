@@ -86,7 +86,6 @@ angular.module('uiRouterSample').controller('filters', function($scope, $filter,
       $scope.$parent.myPurchases = $scope.$parent.myPurchases_copy;
     }
     if ($scope.showValue == 1) {
-      console.log("Default view sort");
       $scope.$parent.destroy();
       setTimeout(function() {
         $scope.$parent.ammendment();
@@ -99,8 +98,6 @@ angular.module('uiRouterSample').controller('filters', function($scope, $filter,
         for (var i = 0; i < myRows.length; i++) {
           var match = _.findWhere($scope.myRecommendations, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
           var myPurch = _.findWhere($scope.$parent.myPurchases_copy, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
-          console.log(myRows[$traceurRuntime.toProperty(i)]);
-          console.log("Got here", myRows[$traceurRuntime.toProperty(i)].id, myPurch);
           myRows[$traceurRuntime.toProperty(i)].cells[0].innerHTML = myPurch.NDC + "<button class='btn btn-info btn-sm' id='b" + match.RowID + "'>Recommendations</button>";
           myRows[$traceurRuntime.toProperty(i)].cells[0].id = match.RowID;
           angular.element(myRows[$traceurRuntime.toProperty(i)].cells[0]).on('click', function(ev) {
@@ -132,6 +129,7 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
       }
       obj.SalesPrice = parseFloat(obj.SalesPrice).toFixed(2);
       obj.Total = parseFloat(obj.Total).toFixed(2);
+      obj.TotalSavings2 = parseFloat(obj.TotalSavings).toFixed(2);
       newArray.push(obj);
     });
     $scope.myPurchases = newArray;
@@ -189,6 +187,30 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
   $scope.tableConfig.currentPage = 1;
   $scope.$watch('tableConfig.currentPage', function(newVal, oldVal) {
     if (newVal !== oldVal) {
+      if ($scope.showValue == 0) {
+        $scope.destroy();
+        setTimeout(function() {
+          var myTable = document.getElementById("queryTable");
+          var myRows = document.getElementsByClassName("mainRows");
+          for (var i = 0; i < myRows.length; i++) {
+            var match = _.findWhere($scope.myRecommendations, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
+            console.log(match.Descr);
+            var myPurch = _.findWhere($scope.myPurchases, {RowID: myRows[$traceurRuntime.toProperty(i)].id});
+            myRows[$traceurRuntime.toProperty(i)].cells[0].innerHTML = myPurch.NDC + "<button class='btn btn-info btn-sm' id='b" + match.RowID + "'>Recommendations</button>";
+            myRows[$traceurRuntime.toProperty(i)].cells[0].id = match.RowID;
+            angular.element(myRows[$traceurRuntime.toProperty(i)].cells[0]).on('click', function(ev) {
+              var theID = ev.target.id.substring(1);
+              var match = _.findWhere($scope.myRecommendations, {RowID: theID});
+              var subRows = document.getElementsByClassName('subRow');
+              for (var i = 0; i < subRows.length; i++) {
+                subRows[$traceurRuntime.toProperty(i)].remove();
+              }
+              $scope.miniAmmend(theID, match);
+            });
+          }
+        }, 100);
+        return;
+      }
       $scope.destroy($scope.tableConfig.itemsPerPage);
       setTimeout(function() {
         $scope.ammendment();
@@ -331,6 +353,7 @@ angular.module('uiRouterSample').controller('TodoCtrl', function($scope, recoFac
     }
   };
   $scope.miniAmmend = function(rowid, match) {
+    console.log("Mini ammend?", rowid);
     var myTable = document.getElementById("queryTable");
     var row = document.getElementById(rowid);
     var myPurch = _.findWhere($scope.myPurchases, {RowID: rowid});

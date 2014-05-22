@@ -25,6 +25,18 @@ tr:nth-child(1n) p {
 	font-weight: 800;
 }
 
+#queryTable th:nth-child(10) {
+		background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
+#queryTable td:nth-child(10) {
+		background: #a5d1ff;
+		text-align: center;
+		display: none;
+}
+
 /*.mainRows{
 	cursor: pointer;
 }*/
@@ -105,11 +117,7 @@ tr:nth-child(2n) p{
 		display: none;
 }
 
-#queryTable th:nth-child(10) {
-		background: #a5d1ff;
-		text-align: center;
-		display: none;
-}
+
 
 #queryTable tr td:nth-child(13) {
 		/*background: #a5d1ff;*/

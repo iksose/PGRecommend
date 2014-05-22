@@ -113,7 +113,7 @@ angular.module('uiRouterSample')
 
       if($scope.showValue == 1){
         // 1 = expanded view...default
-        console.log("Default view sort")
+        // console.log("Default view sort")
         $scope.$parent.destroy();
         setTimeout(function(){$scope.$parent.ammendment()}, 100);
       } else if($scope.showValue == 0){
@@ -131,8 +131,8 @@ angular.module('uiRouterSample')
           // console.log(match.Descr)
           var myPurch = _.findWhere($scope.$parent.myPurchases_copy, {RowID: myRows[i].id});
           // alert("Got here", myPurch)
-          console.log(myRows[i])
-          console.log("Got here", myRows[i].id, myPurch)
+          // console.log(myRows[i])
+          // console.log("Got here", myRows[i].id, myPurch)
           myRows[i].cells[0].innerHTML = myPurch.NDC + "<button class='btn btn-info btn-sm' id='b"+match.RowID+"'>Recommendations</button>"
           myRows[i].cells[0].id = match.RowID;
           angular.element(myRows[i].cells[0]).on('click', function(ev){

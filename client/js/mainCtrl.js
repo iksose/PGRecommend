@@ -25,6 +25,7 @@ angular.module('uiRouterSample')
       }
       obj.SalesPrice = parseFloat(obj.SalesPrice).toFixed(2);
       obj.Total = parseFloat(obj.Total).toFixed(2);
+      obj.TotalSavings2 = parseFloat(obj.TotalSavings).toFixed(2);
       newArray.push(obj)
     })
 
@@ -88,6 +89,37 @@ angular.module('uiRouterSample')
   $scope.tableConfig.currentPage = 1;
   $scope.$watch('tableConfig.currentPage', function(newVal, oldVal) {
     if(newVal !== oldVal){
+      if($scope.showValue == 0){
+        // if page change and in "compact" view
+        // console.log("Next page with collapsed")
+        $scope.destroy();
+        //now add buttons
+        setTimeout(function(){
+            var myTable = document.getElementById("queryTable");
+            var myRows = document.getElementsByClassName("mainRows");
+            for(var i = 0; i < myRows.length; i++){
+              var match = _.findWhere($scope.myRecommendations, {RowID: myRows[i].id});
+              console.log(match.Descr)
+              var myPurch = _.findWhere($scope.myPurchases, {RowID: myRows[i].id});
+              myRows[i].cells[0].innerHTML = myPurch.NDC + "<button class='btn btn-info btn-sm' id='b"+match.RowID+"'>Recommendations</button>"
+              myRows[i].cells[0].id = match.RowID;
+              angular.element(myRows[i].cells[0]).on('click', function(ev){
+                var theID = ev.target.id.substring(1)
+                // console.log("Gotcha fucker", theID)
+                var match = _.findWhere($scope.myRecommendations, {RowID: theID});
+                // console.log(match)
+                // console.log(myRows[i])
+                var subRows = document.getElementsByClassName('subRow')
+                for(var i = 0; i < subRows.length; i++)
+                {
+                  subRows[i].remove();
+                }
+                $scope.miniAmmend(theID, match);
+              })
+            }
+        }, 100);
+        return;
+      }
       $scope.destroy($scope.tableConfig.itemsPerPage);
       setTimeout(function(){$scope.ammendment()}, 100);
     }
@@ -271,8 +303,9 @@ angular.module('uiRouterSample')
     }
   }
 
+
   $scope.miniAmmend = function(rowid, match){
-    // console.log("Mini ammend?", rowid)
+    console.log("Mini ammend?", rowid)
     var myTable = document.getElementById("queryTable");
     var row = document.getElementById(rowid);
     var myPurch = _.findWhere($scope.myPurchases, {RowID: rowid});
